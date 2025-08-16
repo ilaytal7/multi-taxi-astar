@@ -30,7 +30,7 @@ Below is a grid-world configuration you can run with `TaxiProblem`:
 
 ## Example Output
 A*: (number of moves, runtime , [(taxi_1 action, location), (taxi_2 action, location) , ....]
-A*:  (13, 0.031189918518066406, [(('move', 'taxi 1', (3, 0)), ('move', 'taxi 2', (0, 0))), (('pick up', 'taxi 1', 'Tamar'), ('pick up', 'taxi 2', 'Iris'))
+A*:  (13, 0.031313180923461914, [(('move', 'taxi 1', (3, 0)), ('move', 'taxi 2', (0, 0))), (('pick up', 'taxi 1', 'Tamar'), ('pick up', 'taxi 2', 'Iris')), (('move', 'taxi 1', (3, 1)), ('move', 'taxi 2', (0, 1))), (('move', 'taxi 1', (3, 2)), ('move', 'taxi 2', (0, 2))), (('drop off', 'taxi 1', 'Tamar'), ('move', 'taxi 2', (0, 3))), (('move', 'taxi 1', (3, 1)), ('move', 'taxi 2', (1, 3))), (('pick up', 'taxi 1', 'Daniel'), ('refuel', 'taxi 2')), (('move', 'taxi 1', (2, 1)), ('move', 'taxi 2', (2, 3))), (('drop off', 'taxi 1', 'Daniel'), ('pick up', 'taxi 2', 'Freyja')), (('wait', 'taxi 1'), ('move', 'taxi 2', (2, 4))), (('wait', 'taxi 1'), ('drop off', 'taxi 2', 'Freyja')), (('wait', 'taxi 1'), ('move', 'taxi 2', (1, 4))), (('wait', 'taxi 1'), ('drop off', 'taxi 2', 'Iris'))])
 
 ---
 
