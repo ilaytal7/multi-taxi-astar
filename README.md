@@ -67,8 +67,7 @@ The implementation includes three heuristics:
    ```
 
    ✅ **Admissibility:**  
-   - Manhattan distances never overestimate.  
-   - Closest-taxi distances are the minimum possible pickup costs.  
+   - Average distance never overestimates (because at least one taxi must travel the maximum distance, which is always greater than or equal to the average distance).   -      - Closest-taxi distances are the minimum possible pickup costs.  
    - Capacity penalty reflects unavoidable extra trips.  
    - Task counts are minimal required steps.  
    Therefore, `h` is **admissible** and guarantees that A* will find the optimal solution.
