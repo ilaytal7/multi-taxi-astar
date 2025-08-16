@@ -11,20 +11,26 @@ We use the **A\*** search algorithm to guarantee an **optimal solution**.
 - **Goal:** deliver all passengers to their destinations optimally.
 
 ---
-
+## Demo 
 ## Example Input
 Below is a grid-world configuration you can run with `TaxiProblem`:
 
-     'map': [['P', 'P', 'P', 'P', 'P'],
+    {
+        'map': [['P', 'P', 'P', 'P', 'P'],
                 ['P', 'I', 'P', 'G', 'P'],
                 ['P', 'P', 'I', 'P', 'P'],
                 ['P', 'P', 'P', 'I', 'P']],
         'taxis': {'taxi 1': {'location': (2, 0), 'fuel': 5, 'capacity': 2},
                   'taxi 2': {'location': (0, 1), 'fuel': 6, 'capacity': 2}},
         'passengers': {'Iris': {'location': (0, 0), 'destination': (1, 4)},
-                                'Tomer': {'location': (3, 1), 'destination': (2, 1)},
-                                'Sahar': {'location': (2, 3), 'destination': (2, 4)},
-                                'Yarin': {'location': (3, 0), 'destination': (3, 2)}}
+                       'Daniel': {'location': (3, 1), 'destination': (2, 1)},
+                       'Freyja': {'location': (2, 3), 'destination': (2, 4)},
+                       'Tamar': {'location': (3, 0), 'destination': (3, 2)}},
+    }
+
+## Example Output
+A*: (number of moves, runtime , [(taxi_1 action, location), (taxi_2 action, location) , ....]
+A*:  (13, 0.031189918518066406, [(('move', 'taxi 1', (3, 0)), ('move', 'taxi 2', (0, 0))), (('pick up', 'taxi 1', 'Tamar'), ('pick up', 'taxi 2', 'Iris'))
 
 ---
 
@@ -79,14 +85,5 @@ The implementation includes three heuristics:
 - `check.py` — Runner with example scenarios for a quick demo.
 - `search.py` / `utils.py` — AIMA search helpers.
 
-## Demo
-Run locally:
-```bash
-python check.py
-```
 
-Sample output:
-```
-Solution: ['move east', 'pick up Alice', 'move south', 'drop off Alice']
-Path length: 4
 ```
