@@ -1,4 +1,4 @@
-# Multi-Taxi Planning with A* (Portfolio)
+# Multi-Taxi Planning with A*
 
 The **main goal** of this project is to coordinate multiple taxis so that **all passengers reach their destinations with the minimum number of steps**.  
 We use the **A\*** search algorithm to guarantee an **optimal solution**.
@@ -9,6 +9,24 @@ We use the **A\*** search algorithm to guarantee an **optimal solution**.
 - Each passenger has an origin and a destination.
 - An action step is either a single taxi action or a **tuple** of actions (one per taxi), executed simultaneously (no collisions).
 - **Goal:** deliver all passengers to their destinations optimally.
+
+---
+
+## Example Input
+Below is a grid-world configuration you can run with `TaxiProblem`:
+
+     'map': [['P', 'P', 'P', 'P', 'P'],
+                ['P', 'I', 'P', 'G', 'P'],
+                ['P', 'P', 'I', 'P', 'P'],
+                ['P', 'P', 'P', 'I', 'P']],
+        'taxis': {'taxi 1': {'location': (2, 0), 'fuel': 5, 'capacity': 2},
+                  'taxi 2': {'location': (0, 1), 'fuel': 6, 'capacity': 2}},
+        'passengers': {'Iris': {'location': (0, 0), 'destination': (1, 4)},
+                                'Tomer': {'location': (3, 1), 'destination': (2, 1)},
+                                'Sahar': {'location': (2, 3), 'destination': (2, 4)},
+                                'Yarin': {'location': (3, 0), 'destination': (3, 2)}}
+
+---
 
 ## Algorithms
 - **A\*** Search over the state space using AIMA helpers (`search.py`, `utils.py`).
