@@ -1,14 +1,14 @@
-# Multi-Taxi Planning with A* 
+# Multi-Taxi Planning with A* (Portfolio)
 
-This project implements a heuristic search solution (**A*** algorithm) for a deterministic **multi-taxi transportation problem**.
-The objective is to coordinate taxis on a grid to **pick up** and **drop off** passengers while respecting **fuel** and **capacity** constraints.
+The **main goal** of this project is to coordinate multiple taxis so that **all passengers reach their destinations with the minimum number of steps**.  
+We use the **A\*** search algorithm to guarantee an **optimal solution**.
 
 ## Problem Statement
 - Grid cells can be: free, **I** (wall), or **G** (gas station).
 - Each taxi has a location `(x, y)`, `fuel`, and `capacity`.
-- Each passenger has an origin and destination.
-- A step is either a single taxi action or a **tuple** of actions (one per taxi), executed simultaneously (no collisions).
-- **Goal:** deliver all passengers to their destinations.
+- Each passenger has an origin and a destination.
+- An action step is either a single taxi action or a **tuple** of actions (one per taxi), executed simultaneously (no collisions).
+- **Goal:** deliver all passengers to their destinations optimally.
 
 ## Algorithms
 - **A\*** Search over the state space using AIMA helpers (`search.py`, `utils.py`).
@@ -16,63 +16,44 @@ The objective is to coordinate taxis on a grid to **pick up** and **drop off** p
 ### Heuristics
 The implementation includes three heuristics:
 
-1. **`h_1` (Baseline)**  
-   \[
-   h_1 = \frac{2 \cdot |U'| + |P_{undelivered}|}{|T|}
-   \]  
-   Where \(U'\) = number of unpicked passengers,  
-   \(P_{undelivered}\) = passengers picked up but not delivered,  
-   \(T\) = number of taxis.  
+1. **h1 (Baseline)**  
+   ```
+   h1 = (2 * num_unpicked + num_picked_not_delivered) / num_taxis
+   ```
+   - Simple lower bound that counts the minimum number of required actions.  
+   - Admissible because it never overestimates.
 
-   A simple admissible lower bound, counting actions needed at minimum.
+2. **h2 (Manhattan-based)**  
+   ```
+   h2 = (sum of Manhattan distances from passenger origins to destinations
+         + sum of distances from current passenger locations to destinations)
+         / num_taxis
+   ```
+   - Estimates effort based on Manhattan distances.  
+   - Admissible because Manhattan distance ≤ true path cost in a grid.
 
-2. **`h_2` (Manhattan-based)**  
-   \[
-   h_2 = \frac{\sum_{p \in P} \text{dist}(origin_p, dest_p) + \text{dist}(current_p, dest_p)}{|T|}
-   \]  
-   Uses Manhattan distances from passenger locations to destinations.
+3. **h (Custom heuristic)**  
+   Designed to be a **tighter admissible heuristic**, combining multiple signals:  
+   - **Average passenger-to-destination distance**: average remaining distance for undelivered passengers.  
+   - **Pickup effort**: average distance from unpicked passengers to their closest taxi.  
+   - **Capacity shortfall penalty**: if total taxi capacity < number of unpicked passengers, add a penalty.  
+   - **Counts of remaining tasks**: adds the number of unpicked + undelivered passengers as stabilizers.
 
-3. **`h` (Custom heuristic)**  
-   This heuristic was designed to give a tighter lower bound by combining multiple signals:
-
-   - **Passenger-to-destination distance (average):**  
-     \[
-     \frac{\sum_{p \in U} \text{dist}(loc_p, dest_p)}{|U|}
-     \]
-     where \(U\) = set of undelivered passengers.
-
-   - **Pickup effort (average distance from unpicked passengers to closest taxi):**  
-     \[
-     \frac{\sum_{p \in U'} \min_{t \in T} \text{dist}(loc_p, loc_t)}{|U'|}
-     \]
-     where \(U'\) = set of unpicked passengers, \(T\) = set of taxis.
-
-   - **Capacity shortfall penalty:**  
-     \[
-     \Delta_{capacity} = \max \Big(0, |U'| - \sum_{t \in T} capacity_t \Big)
-     \]  
-     Ensures that if there are more unpicked passengers than available capacity, the heuristic reflects the need for additional trips.
-
-   - **Counts of remaining tasks:**  
-     \[
-     |U| + |U'|
-     \]
-     Stabilizes the estimate by directly counting outstanding passengers.
-
-   Putting it together:  
-   \[
-   h = \frac{\sum_{p \in U} \text{dist}(loc_p, dest_p)}{|U|}
-     + \frac{\sum_{p \in U'} \min_{t \in T} \text{dist}(loc_p, loc_t)}{|U'|}
-     + \Delta_{capacity}
-     + |U| + |U'|
-   \]
+   Formula (simplified):  
+   ```
+   h = avg_distance_to_dest
+     + avg_distance_to_closest_taxi
+     + capacity_shortfall
+     + num_undelivered
+     + num_unpicked
+   ```
 
    ✅ **Admissibility:**  
-   - Manhattan distances are always lower bounds in a grid.  
-   - Closest-taxi distance is the minimum possible pickup effort.  
-   - The capacity penalty only acknowledges unavoidable extra trips.  
-   - Passenger counts cannot overestimate cost.  
-   Therefore, `h` never exceeds the true minimal cost to reach the goal, making it **admissible**.
+   - Manhattan distances never overestimate.  
+   - Closest-taxi distances are the minimum possible pickup costs.  
+   - Capacity penalty reflects unavoidable extra trips.  
+   - Task counts are minimal required steps.  
+   Therefore, `h` is **admissible** and guarantees that A* will find the optimal solution.
 
 ---
 
@@ -82,5 +63,13 @@ The implementation includes three heuristics:
 - `search.py` / `utils.py` — AIMA search helpers.
 
 ## Demo
+Run locally:
 ```bash
 python check.py
+```
+
+Sample output:
+```
+Solution: ['move east', 'pick up Alice', 'move south', 'drop off Alice']
+Path length: 4
+```
