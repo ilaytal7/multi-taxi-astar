@@ -1,4 +1,4 @@
-import ex1
+import multi_taxi_planning
 import search
 import time
 from dataclasses import dataclass, field
@@ -31,9 +31,6 @@ def timeout_exec(func, args=(), kwargs={}, timeout_duration=10, default=None):
 
 
 def check_problem(p, search_method, timeout):
-    """ Constructs a problem using ex1.create_wumpus_problem,
-    and solves it using the given search_method with the given timeout.
-    Returns a tuple of (solution length, solution time, solution)"""
 
     """ (-2, -2, None) means there was a timeout
     (-3, -3, ERR) means there was some error ERR during search """
@@ -56,7 +53,7 @@ def solve_problems(problems):
     solved = 0
     for problem in problems:
         try:
-            p = ex1.create_taxi_problem(problem)
+            p = multi_taxi_planning.create_taxi_problem(problem)
         except Exception as e:
             print("Error creating problem: ", e)
             return None
